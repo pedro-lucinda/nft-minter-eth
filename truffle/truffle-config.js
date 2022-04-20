@@ -1,3 +1,12 @@
+require("dotenv").config();
+const HDWalletProvider  = require("@truffle/hdwallet-provider");
+
+const private_keys = [
+  process.env.PRIVATE_KEY_0,
+  process.env.PRIVATE_KEY_1,
+];
+
+
 /**
  * Use this file to configure your truffle project. It's seeded with some
  * common settings for different networks and features like migrations,
@@ -33,7 +42,6 @@ module.exports = {
    *
    * $ truffle test --network <network-name>
    */
-
   networks: {
     // Useful for testing. The `development` name is special - truffle uses it by default
     // if it's defined here and no other network is specified at the command line.
@@ -43,8 +51,23 @@ module.exports = {
     //
     development: {
      host: "127.0.0.1",     // Localhost (default: none)
-     port: 8545,            // Standard Ethereum port (default: none)
+     port: 7545,            // Standard Ethereum port (default: none)
      network_id: "*",       // Any network (default: none)
+    },
+     rinkeby: {
+      provider: () =>
+        new HDWalletProvider({
+          privateKeys: private_keys,
+          // Testnet
+          providerOrUrl:
+            "wss://rinkeby.infura.io/ws/v3/4577a4d2382740d3a9e43c7cad6aed67",
+          numberOfAddresses: 2,
+        }),
+      network_id: 4,
+      gas: 5500000,
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true,
     },
     // Another network with more advanced options...
     // advanced: {
@@ -84,10 +107,10 @@ module.exports = {
       version: "0.8.11",    // Fetch exact version from solc-bin (default: truffle's version)
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
       // settings: {          // See the solidity docs for advice about optimization and evmVersion
-      //  optimizer: {
-      //    enabled: false,
-      //    runs: 200
-      //  },
+       optimizer: {
+         enabled: false,
+         runs: 200
+       },
       //  evmVersion: "byzantium"
       // }
     }

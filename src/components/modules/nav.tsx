@@ -1,11 +1,13 @@
-import { Button, Flex, HStack } from '@chakra-ui/react'
 import React from 'react'
+import { Button, Flex, Heading, HStack } from '@chakra-ui/react'
 import { useColorMode } from '@chakra-ui/color-mode'
-import { AuthButton } from '../elements/auth-button'
+import { useMoralis } from 'react-moralis'
+import { getEllipsisTxt } from '@/helpers/formatters'
 
 export const Nav = () => {
   const { colorMode, toggleColorMode } = useColorMode()
-
+  const { user, logout } = useMoralis()
+  
   return (
     <Flex
       w="full"
@@ -17,7 +19,15 @@ export const Nav = () => {
       pb={4}
     >
       <HStack spacing={4} ml="auto">
-        <AuthButton />
+        {user && (
+          <>
+            <Heading fontSize="md">
+              Connected: {getEllipsisTxt(user.id as string, 4)}
+            </Heading>
+            <Button onClick={() => logout()}>Sign out</Button>
+          </>
+        )}
+
         <Button onClick={toggleColorMode}>
           {colorMode === 'dark' ? 'light' : 'dark'}
         </Button>

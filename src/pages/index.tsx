@@ -1,13 +1,13 @@
-import type { NextPage } from "next";
-import { PublicPage } from "../components/layouts/public-page";
-import { HomeView } from '../views'
+import { LoginView } from '@/views/login-view'
+import type { NextPage } from 'next'
+import { PublicPage } from '../components/layouts/public-page'
 
-const Home: NextPage = () => {
+const Login: NextPage = () => {
   return (
     <PublicPage>
-      <HomeView />
+      <LoginView />
     </PublicPage>
   )
-};
+}
 
-export default Home;
+export default Login

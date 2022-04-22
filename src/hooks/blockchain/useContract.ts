@@ -1,24 +1,14 @@
-import { Contract } from '@ethersproject/contracts'
-import { useWeb3React } from '@web3-react/core'
-import { useMemo } from 'react'
+import { useMoralisWeb3Api, useMoralisWeb3ApiCall } from 'react-moralis'
 
-export default function useContract<T extends Contract = Contract>(
-  address: string,
-  ABI: any,
-): T | null {
-  const { library, account, chainId } = useWeb3React()
+export const useAPIContract = (options: any) => {
+  const { native } = useMoralisWeb3Api()
 
-  return useMemo(() => {
-    if (!address || !ABI || !library || !chainId) {
-      return null
-    }
+  const {
+    fetch: runContractFunction,
+    data: contractResponse,
+    error,
+    isLoading,
+  } = useMoralisWeb3ApiCall(native.runContractFunction, { ...options })
 
-    try {
-      return new Contract(address, ABI, library.getSigner(account))
-    } catch (error) {
-      console.error('Failed To Get Contract', error)
-
-      return null
-    }
-  }, [address, ABI, library, chainId, account]) as T
+  return { runContractFunction, contractResponse, error, isLoading }
 }

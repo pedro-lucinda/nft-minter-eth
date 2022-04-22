@@ -1,6 +1,7 @@
-import { Flex } from "@chakra-ui/react";
-import React from "react";
-import { Nav } from "../modules/nav";
+import { Flex } from '@chakra-ui/react'
+import React from 'react'
+import { Footer } from '../modules/footer'
+import { Nav } from '../modules/nav'
 
 export const AppLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -14,6 +15,7 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
     >
       <Nav />
       {children}
+      <Footer />
     </Flex>
-  );
-};
+  )
+}

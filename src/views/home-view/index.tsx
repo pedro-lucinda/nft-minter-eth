@@ -1,51 +1,25 @@
-import { useMinterContract } from '@/blockchain/contracts/minter/use-minter-contract'
-import { toast } from '@/components/elements/toast'
-import { Button, Flex, Input } from '@chakra-ui/react'
+import { Flex, Heading, useDisclosure } from '@chakra-ui/react'
 import React from 'react'
-import { useMoralis } from 'react-moralis'
+import { MintSuccessModal } from './components/mint-sucess-modal'
+import { NftForm } from './components/nft-form'
 
 export const HomeView = () => {
-  const { user } = useMoralis()
-  const { executeMintContract } = useMinterContract()
-  const [name, setName] = React.useState('')
-  const [description, setDescription] = React.useState('')
-  const [file, setFile] = React.useState(null)
+  const { isOpen, onClose, onOpen } = useDisclosure()
+  const [responseData, setResponseData] = React.useState<any>()
 
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!file) {
-      return toast({ title: 'Please upload an image', status: 'error' })
-    }
-    await executeMintContract(name, description, file)
+  const onSuccess = (response: any) => {
+    console.log('response', response)
+    setResponseData(response)
+    onOpen()
   }
 
   return (
-    <Flex w="full" direction="column" align="center">
-      <form onSubmit={onSubmit}>
-        <Flex>
-          <Input
-            type="text"
-            value={name}
-            placeholder="Name"
-            onChange={(e) => setName(e.target.value)}
-          />
-        </Flex>
-        <Flex>
-          <Input
-            type="text"
-            value={description}
-            placeholder="Description"
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </Flex>
-        <Flex>
-          <Input
-            type="file"
-            onChange={(e) => setFile((e as any).target.files[0])}
-          />
-        </Flex>
-        <Button type="submit">Mint now!</Button>
-      </form>
-    </Flex>
+    <>
+      <MintSuccessModal isOpen={isOpen} onClose={onClose} data={responseData} />
+      <Flex w="full" direction="column" align="center">
+        <Heading my={10}>Create your NFT</Heading>
+        <NftForm onSuccess={onSuccess} />
+      </Flex>
+    </>
   )
 }

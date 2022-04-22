@@ -5,6 +5,7 @@ import { NftCard } from '@/components/elements/nft-card'
 import { TextArea } from '@/components/elements/text-area'
 import { toast } from '@/components/elements/toast'
 import { Box, Button, Flex } from '@chakra-ui/react'
+import { sleep } from '@/helpers/sleep'
 
 interface NftFormProps {
   onSuccess: any
@@ -28,8 +29,10 @@ export const NftForm = ({ onSuccess }: NftFormProps) => {
     await executeMintContract(name, description, file, handleSuccess)
   }
 
-  const handleSuccess = (response: any) => {
+  const handleSuccess = async (response: any) => {
     clearForm()
+    await sleep(4000)
+
     onSuccess(response)
   }
 

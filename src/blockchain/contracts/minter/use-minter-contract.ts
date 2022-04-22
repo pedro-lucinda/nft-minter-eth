@@ -1,6 +1,7 @@
 import { toast } from '@/components/elements/toast'
 import { web3 } from '@/config/lib/web3'
 import { formatContractError } from '@/helpers/blockchain-contract-error'
+
 import { useIPFS } from '@/hooks/blockchain/useIPFS'
 import React from 'react'
 import { useMoralis } from 'react-moralis'
@@ -21,7 +22,7 @@ export function useMinterContract() {
     name: string,
     description: string,
     file: File,
-    fn: (response: any) => any,
+    fn: (response: any) => Promise<any>,
   ) {
     try {
       setIsMinterContractLoading(true)
@@ -40,7 +41,7 @@ export function useMinterContract() {
         .mint(metadataURL)
         .send({ from: user?.get('ethAddress') })
       // Execute function
-      fn(response)
+      await fn(response)
     } catch (err: any) {
       console.log(err)
       toast({

@@ -4,7 +4,7 @@ import { useMoralis } from 'react-moralis'
 import { getEllipsisTxt } from '@/helpers/formatters'
 
 export const Nav = () => {
-  const { user, logout } = useMoralis()
+  const { isAuthenticated, account, user, logout } = useMoralis()
 
   return (
     <Flex
@@ -17,10 +17,10 @@ export const Nav = () => {
       pb={4}
     >
       <Heading size="sm">NFT Minter</Heading>
-      {user && (
+      {isAuthenticated && account && user && (
         <HStack spacing={4} ml="auto" bg="brand.glass" p="8px 20px">
           <Heading fontSize="sm">
-            Connected: {getEllipsisTxt(user.id as string, 4)}
+            Connected: {getEllipsisTxt(user?.id as string, 4)}
           </Heading>
           <Button
             onClick={() => logout()}

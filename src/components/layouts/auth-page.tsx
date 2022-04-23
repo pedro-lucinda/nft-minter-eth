@@ -4,14 +4,13 @@ import React from 'react'
 import { useMoralis } from 'react-moralis'
 
 export const AuthPage = ({ children }: { children: React.ReactNode }) => {
-  const { user } = useMoralis()
+  const { isAuthenticated, account } = useMoralis()
   const router = useRouter()
-
   React.useEffect(() => {
-    if (!user) {
+    if (!isAuthenticated || !account) {
       router.push('/')
     }
-  }, [user, router])
+  }, [isAuthenticated, account, router])
 
   return (
     <Flex w="full" h="full">

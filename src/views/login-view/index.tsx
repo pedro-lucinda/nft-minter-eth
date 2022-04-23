@@ -5,12 +5,12 @@ import React from 'react'
 import { useMoralis } from 'react-moralis'
 
 export const LoginView = () => {
-  const { authenticate, user } = useMoralis()
+  const { authenticate, account, isAuthenticated, isWeb3Enabled } = useMoralis()
   const router = useRouter()
 
   React.useEffect(() => {
-    if (user) router.push('/home')
-  }, [user, router])
+    if (isAuthenticated && account) router.push('/home')
+  }, [isAuthenticated, router, account])
 
   return (
     <Flex
@@ -41,7 +41,9 @@ export const LoginView = () => {
         </Text>
         <Button
           mt="50px"
-          onClick={() => authenticate()}
+          onClick={() =>
+            authenticate({ signingMessage: 'Log in using Moralis' })
+          }
           variant="lightBlue"
           size="lg"
           h="56px"

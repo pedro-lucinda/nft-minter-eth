@@ -4,9 +4,9 @@ import React from 'react'
 import { useMoralis } from 'react-moralis'
 
 export const AuthPage = ({ children }: { children: React.ReactNode }) => {
-  const { user, account } = useMoralis()
+  const { user } = useMoralis()
   const router = useRouter()
-  console.log('account', account)
+
   React.useEffect(() => {
     if (!user) {
       router.push('/')

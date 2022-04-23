@@ -1,12 +1,41 @@
 import { MINTER_CONTRACT_ADDRESS } from '@/blockchain/contracts/minter'
 import { Modal } from '@/components/modules/modal'
-import { Button, Flex, Heading, HStack, Text, VStack } from '@chakra-ui/react'
-import React from 'react'
+import { sleep } from '@/helpers/sleep'
+import {
+  Button,
+  Flex,
+  Heading,
+  HStack,
+  Spinner,
+  Text,
+  VStack,
+} from '@chakra-ui/react'
+import React, { useEffect } from 'react'
 
-export const MintSuccessModal = ({ data, isOpen, onClose }: any) => {
+interface MintSuccessModalProps {
+  data: any
+  isOpen: boolean
+  onClose: () => void
+}
+
+export const MintSuccessModal = ({
+  data,
+  isOpen,
+  onClose,
+}: MintSuccessModalProps) => {
+  const [isLinkLoading, setIsLinkLoading] = React.useState(false)
   const tokenId = data?.events?.Transfer?.returnValues?.tokenId
 
-  console.log(data)
+  useEffect(() => {
+    if (!!tokenId && !!data) handleLinkLoading()
+  }, [tokenId, data])
+
+  async function handleLinkLoading() {
+    setIsLinkLoading(true)
+    await sleep(4000)
+    setIsLinkLoading(false)
+  }
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} bg="brand.modalBg">
       <Flex direction="column" align="center">
@@ -37,8 +66,9 @@ export const MintSuccessModal = ({ data, isOpen, onClose }: any) => {
             color="white"
             bg="purple.800"
             colorScheme="purple"
+            isDisabled={isLinkLoading}
           >
-            See on Open Sea
+            See on Open Sea {isLinkLoading && <Spinner size="sm" ml={2} />}
           </Button>
           <Button
             onClick={onClose}

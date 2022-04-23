@@ -34,8 +34,6 @@ export const useIPFS = () => {
       )
       await metadataFormatted.saveIPFS()
 
-      console.log('meta', metadataFormatted)
-
       return (metadataFormatted as any)._ipfs
     } catch (error) {
       console.log(error)

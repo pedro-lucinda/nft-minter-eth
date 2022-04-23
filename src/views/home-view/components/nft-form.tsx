@@ -1,14 +1,13 @@
 import React from 'react'
 import { useMinterContract } from '@/blockchain/contracts/minter/use-minter-contract'
 import { Input } from '@/components/elements/input'
-import { NftCard } from '@/components/elements/nft-card'
+import { NftCard } from '@/components/modules/nft-card'
 import { TextArea } from '@/components/elements/text-area'
 import { toast } from '@/components/elements/toast'
 import { Box, Button, Flex } from '@chakra-ui/react'
-import { sleep } from '@/helpers/sleep'
 
 interface NftFormProps {
-  onSuccess: any
+  onSuccess: (response: any) => void
 }
 
 export const NftForm = ({ onSuccess }: NftFormProps) => {
@@ -31,8 +30,6 @@ export const NftForm = ({ onSuccess }: NftFormProps) => {
 
   const handleSuccess = async (response: any) => {
     clearForm()
-    await sleep(4000)
-
     onSuccess(response)
   }
 
@@ -41,6 +38,7 @@ export const NftForm = ({ onSuccess }: NftFormProps) => {
     setDescription('')
     setFile(null)
   }
+
   return (
     <Flex w="full" direction="column" align="center">
       <NftCard

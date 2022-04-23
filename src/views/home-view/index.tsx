@@ -8,7 +8,6 @@ export const HomeView = () => {
   const [responseData, setResponseData] = React.useState<any>()
 
   const onSuccess = (response: any) => {
-    console.log('response', response)
     setResponseData(response)
     onOpen()
   }

@@ -1,6 +1,16 @@
 import { useMoralisWeb3Api, useMoralisWeb3ApiCall } from 'react-moralis'
 
-export const useAPIContract = (options: any) => {
+interface ContractOptions {
+  abi: any
+  chain: 'rinkeby'
+  address: string
+  function_name: string
+  params: {
+    [key: string]: any
+  }
+}
+
+export const useAPIContract = (options: ContractOptions) => {
   const { native } = useMoralisWeb3Api()
 
   const {

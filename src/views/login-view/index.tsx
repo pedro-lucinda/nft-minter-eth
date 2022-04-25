@@ -1,17 +1,26 @@
 import { MetamaskLogo } from '@/components/elements/metamask-logo'
+import { useUserStore } from '@/store/user-store'
 import { Button, Flex, Heading, Image, Text } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useMoralis } from 'react-moralis'
 
 export const LoginView = () => {
-  const { authenticate, account, isAuthenticated, isWeb3Enabled } = useMoralis()
+  const { authenticate, account, isAuthenticated } = useMoralis()
+  const { updateUserAddress } = useUserStore()
   const router = useRouter()
 
   React.useEffect(() => {
-    if (isAuthenticated && account) router.push('/home')
-  }, [isAuthenticated, router, account])
+    if (isAuthenticated && account) {
+      handleLogin()
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated, account])
 
+  const handleLogin = useCallback(() => {
+    updateUserAddress(account)
+    router.push('/home')
+  }, [account, router, updateUserAddress])
   return (
     <Flex
       align={['center', 'center', 'start']}

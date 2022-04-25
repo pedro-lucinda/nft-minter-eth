@@ -1,7 +1,7 @@
 import React from 'react'
 import { useMinterContract } from '@/blockchain/contracts/minter/use-minter-contract'
 import { Input } from '@/components/elements/input'
-import { NftCard } from '@/components/modules/nft-card'
+import { NftInputCard } from '@/components/modules/nft-input-card'
 import { TextArea } from '@/components/elements/text-area'
 import { toast } from '@/components/elements/toast'
 import { Box, Button, Flex } from '@chakra-ui/react'
@@ -41,7 +41,7 @@ export const NftForm = ({ onSuccess }: NftFormProps) => {
 
   return (
     <Flex w="full" direction="column" align="center">
-      <NftCard
+      <NftInputCard
         name={name}
         description={description}
         image={file}

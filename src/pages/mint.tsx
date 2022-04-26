@@ -1,13 +1,13 @@
 import { AuthPage } from '@/components/layouts/auth-page'
-import { HomeView } from '@/views/home-view'
+import { MintView } from '@/views/mint-view'
 import type { NextPage } from 'next'
 
-const Home: NextPage = () => {
+const Mint: NextPage = () => {
   return (
     <AuthPage>
-      <HomeView />
+      <MintView />
     </AuthPage>
   )
 }
 
-export default Home
+export default Mint

@@ -19,7 +19,7 @@ export const LoginView = () => {
 
   const handleLogin = useCallback(() => {
     updateUserAddress(account)
-    router.push('/home')
+    router.push('/mint')
   }, [account, router, updateUserAddress])
   return (
     <Flex

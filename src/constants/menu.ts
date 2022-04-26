@@ -4,6 +4,6 @@ export interface IMenuRoute {
 }
 
 export const routes: IMenuRoute[] = [
-  { name: 'Mint', path: '/home' },
+  { name: 'Mint', path: '/mint' },
   { name: 'My NFTs', path: '/nfts' },
 ]

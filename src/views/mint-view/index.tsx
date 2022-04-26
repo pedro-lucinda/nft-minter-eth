@@ -1,9 +1,9 @@
 import { Flex, Heading, useDisclosure } from '@chakra-ui/react'
 import React from 'react'
-import { MintSuccessModal } from './components/mint-sucess-modal'
+import { MintSuccessModal } from './components/mint-success-modal'
 import { NftForm } from './components/nft-form'
 
-export const HomeView = () => {
+export const MintView = () => {
   const { isOpen, onClose, onOpen } = useDisclosure()
   const [responseData, setResponseData] = React.useState<any>()
 

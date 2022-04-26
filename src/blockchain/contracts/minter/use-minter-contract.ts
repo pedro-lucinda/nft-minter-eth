@@ -15,7 +15,7 @@ const minterContract = new web3.eth.Contract(
 export function useMinterContract() {
   const [isMinterContractLoading, setIsMinterContractLoading] =
     React.useState(false)
-  const { user } = useMoralis()
+  const { account } = useMoralis()
   const { saveIPFSImageAndGetURL, saveMetadataIPFSAndGetURL } = useIPFS()
 
   async function executeMintContract(
@@ -39,7 +39,7 @@ export function useMinterContract() {
       // RUN CONTRACT
       const response = await minterContract.methods
         .mint(metadataURL)
-        .send({ from: user?.get('ethAddress') })
+        .send({ from: account })
       // Execute function
       await fn(response)
     } catch (err: any) {

@@ -7,37 +7,27 @@ import { IUserStore, NFT, NFTResponse } from './types'
 
 export const useUserStore = create<IUserStore>(
   (set: SetState<IUserStore>): IUserStore => ({
-    // USER
-    userAddress: null,
-    updateUserAddress: (userAddress: string | null) =>
-      set((state) => ({ ...state, userAddress })),
-
-    // BALANCE
-    balance: null,
-    updateUserBalance: (balance: number) =>
-      set((state) => ({ ...state, balance })),
-
     // NFTS
     userNfts: null,
-    fetchUserNfts: async () => await fetchNFTS(set),
+    fetchUserNfts: async (account: string) => await fetchNFTS(set, account),
     isNftsLoading: false,
     toggleIsNftsLoading: () =>
       set((state) => ({ ...state, isNftsLoading: !state.isNftsLoading })),
   }),
 )
 
-async function fetchNFTS(set: SetState<IUserStore>): Promise<NFT[] | null> {
+async function fetchNFTS(
+  set: SetState<IUserStore>,
+  account: string,
+): Promise<NFT[] | null> {
   const toggleIsNftsLoading = useUserStore.getState().toggleIsNftsLoading
   toggleIsNftsLoading()
-  const userAddress = useUserStore.getState().userAddress
-
   try {
-    if (!userAddress) throw new Error('Account is not defined')
+    if (!account) throw new Error('Account is not defined')
     // FETCH
     const nfts = await moralisRestAPI.get<any, NFTResponse>(
-      `/${userAddress}/nft/${MINTER_CONTRACT_ADDRESS}?chain=rinkeby&format=decimal`,
+      `/${account}/nft/${MINTER_CONTRACT_ADDRESS}?chain=rinkeby&format=decimal&limit=500`,
     )
-    console.log('nfts', nfts)
     if (!nfts || nfts?.result?.length < 1) return null
     // FORMAT
     const formatted = formatNFTs(nfts.result)

@@ -32,7 +32,7 @@ export const MintSuccessModal = ({
 
   async function handleLinkLoading() {
     setIsLinkLoading(true)
-    await sleep(4000)
+    await sleep(5000)
     setIsLinkLoading(false)
   }
 

@@ -1,16 +1,9 @@
 import { Metadata } from '@/hooks/blockchain/useIPFS'
 
 export interface IUserStore {
-  // USER
-  userAddress: string | null
-  updateUserAddress: (userAddress: string | null) => void
-  // BALANCE
-  balance: number | null
-  updateUserBalance: (balance: number) => void
-
   // NFTS
   userNfts: NFT[] | null
-  fetchUserNfts: () => Promise<NFT[] | null>
+  fetchUserNfts: (account: string) => Promise<NFT[] | null>
   isNftsLoading: boolean
   toggleIsNftsLoading: () => void
 }

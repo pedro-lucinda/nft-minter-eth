@@ -6,14 +6,10 @@ import { useMoralis } from 'react-moralis'
 
 export const NFTsView = () => {
   const { fetchUserNfts, userNfts, isNftsLoading } = useUserStore()
-
   const { account } = useMoralis()
 
-  console.log({ account })
-
   useEffect(() => {
-    if (!!account) fetchUserNfts()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (!!account) fetchUserNfts(account)
   }, [account, fetchUserNfts])
 
   return (
@@ -25,7 +21,7 @@ export const NFTsView = () => {
         ) : (
           userNfts &&
           userNfts
-            .filter((n) => n?.token_uri && n?.metadata)
+            .filter((n) => n?.metadata?.image)
             .map((n) => <NftCard key={n?.token_id} nft={n} />)
         )}
       </Wrap>

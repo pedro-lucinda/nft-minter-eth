@@ -1,5 +1,6 @@
-import { NFT } from '@/store/user-store/types'
-import { Flex, Heading, Image, VStack } from '@chakra-ui/react'
+import { Metadata } from '@/hooks/blockchain/useIPFS'
+import { NFT } from '@/types/NFT'
+import { Heading, Image, VStack } from '@chakra-ui/react'
 import React from 'react'
 
 export const NftCard = ({ nft }: { nft: NFT }) => {

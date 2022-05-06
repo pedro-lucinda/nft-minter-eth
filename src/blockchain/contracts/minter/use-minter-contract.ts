@@ -1,22 +1,18 @@
 import { toast } from '@/components/elements/toast'
-import { web3 } from '@/config/lib/web3'
 import { formatContractError } from '@/helpers/blockchain-contract-error'
 
 import { useIPFS } from '@/hooks/blockchain/useIPFS'
 import React from 'react'
-import { useMoralis } from 'react-moralis'
+import {  useWeb3ExecuteFunction } from 'react-moralis'
 import { MINTER_CONTRACT_ABI, MINTER_CONTRACT_ADDRESS } from '.'
 
-const minterContract = new web3.eth.Contract(
-  MINTER_CONTRACT_ABI,
-  MINTER_CONTRACT_ADDRESS,
-)
+
 
 export function useMinterContract() {
   const [isMinterContractLoading, setIsMinterContractLoading] =
     React.useState(false)
-  const { account } = useMoralis()
   const { saveIPFSImageAndGetURL, saveMetadataIPFSAndGetURL } = useIPFS()
+  const contractProcessor = useWeb3ExecuteFunction()
 
   async function executeMintContract(
     name: string,
@@ -24,35 +20,43 @@ export function useMinterContract() {
     file: File,
     fn: (response: any) => Promise<any>,
   ) {
-    try {
-      setIsMinterContractLoading(true)
+    setIsMinterContractLoading(true)
 
-      // GET IMAGE URL
-      const fileURL = await saveIPFSImageAndGetURL(file)
-      const metadata = {
-        name,
-        description,
-        image: fileURL as string,
-      }
-      const metadataURL = await saveMetadataIPFSAndGetURL(metadata)
-
-      // RUN CONTRACT
-      const response = await minterContract.methods
-        .mint(metadataURL)
-        .send({ from: account })
-      // Execute function
-      await fn(response)
-    } catch (err: any) {
-      console.log(err)
-      toast({
-        title: `Error on minting NFT: ${formatContractError(err)}`,
-        status: 'error',
-        position: 'top',
-        isClosable: true,
-      })
-    } finally {
-      setIsMinterContractLoading(false)
+    // GET IMAGE URL
+    const fileURL = await saveIPFSImageAndGetURL(file)
+    const metadata = {
+      name,
+      description,
+      image: fileURL as string,
     }
+    const metadataURL = await saveMetadataIPFSAndGetURL(metadata)
+
+    // RUN CONTRACT
+    await contractProcessor.fetch({
+      params: {
+        abi: MINTER_CONTRACT_ABI,
+        contractAddress: MINTER_CONTRACT_ADDRESS,
+        functionName: 'mint',
+        params: {
+          _uri: metadataURL,
+        },
+      },
+      onSuccess: async (res: any) => {
+        await res.wait()
+        await fn(res)
+        setIsMinterContractLoading(false)
+      },
+      onError: (err) => {
+        console.log(err.cause)
+        toast({
+          title: `Error on minting NFT: ${formatContractError(err)}`,
+          status: 'error',
+          position: 'top',
+          isClosable: true,
+        })
+        setIsMinterContractLoading(false)
+      },
+    })
   }
   return {
     executeMintContract,

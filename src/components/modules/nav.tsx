@@ -1,37 +1,19 @@
 import React, { useEffect } from 'react'
 import { Flex, Heading, HStack, Wrap } from '@chakra-ui/react'
-import { useMoralis } from 'react-moralis'
-import { getEllipsisTxt, tokenValue, tokenValueTxt } from '@/helpers/formatters'
+import { useMoralis, useNativeBalance } from 'react-moralis'
+import { getEllipsisTxt, tokenValueTxt } from '@/helpers/formatters'
 import { routes, IMenuRoute } from '@/constants/menu'
 import { MenuItem } from '../elements/menu-item'
 import { SignoutButton } from '../elements/signout-button'
-import { useMoralisWeb3Api } from 'react-moralis'
 
 export const Nav = () => {
   const { isAuthenticated, account, user } = useMoralis()
-  const Web3Api = useMoralisWeb3Api()
 
-  const [balance, setBalance] = React.useState<string | null>(null)
-
-  const getUserBalance = React.useCallback(async () => {
-    const data = await Web3Api.account.getTokenBalances({
-      chain: 'rinkeby',
-      address: account as string,
-    })
-    if (!data || data?.length < 1) return
-
-    const formattedUserBalance = tokenValueTxt(
-      Number(data[0].balance),
-      Number(data[0].decimals),
-      data[0].symbol,
-    )
-
-    setBalance(formattedUserBalance)
-  }, [Web3Api, account])
+  const { getBalances, data: balance } = useNativeBalance({ chain: 'rinkeby' })
 
   useEffect(() => {
-    if (account) getUserBalance()
-  }, [account, getUserBalance])
+    if (account) getBalances()
+  }, [account, getBalances])
 
   return (
     <Flex
@@ -58,7 +40,11 @@ export const Nav = () => {
             <Heading fontSize="sm">
               Connected: {getEllipsisTxt(user?.id as string, 4)}
             </Heading>
-            {balance && <Heading size="sm">Balance: {balance} </Heading>}
+            {balance?.balance && (
+              <Heading size="sm">
+                Balance: {tokenValueTxt(+balance.balance, 18, 'ETH')}{' '}
+              </Heading>
+            )}
             <SignoutButton />
           </HStack>
         </>

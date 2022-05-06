@@ -10,6 +10,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
 
 interface MintSuccessModalProps {
@@ -25,6 +26,7 @@ export const MintSuccessModal = ({
 }: MintSuccessModalProps) => {
   const [isLinkLoading, setIsLinkLoading] = React.useState(false)
   const tokenId = data?.events?.Transfer?.returnValues?.tokenId
+  const router = useRouter()
 
   useEffect(() => {
     if (!!tokenId && !!data) handleLinkLoading()
@@ -58,17 +60,13 @@ export const MintSuccessModal = ({
         </VStack>
         <HStack mb="20px">
           <Button
-            onClick={() =>
-              window.open(
-                `https://testnets.opensea.io/assets/${MINTER_CONTRACT_ADDRESS}/${tokenId}`,
-              )
-            }
+            onClick={() => router.push('/nfts')}
             color="white"
             bg="purple.800"
             colorScheme="purple"
             isDisabled={isLinkLoading}
           >
-            See on Open Sea {isLinkLoading && <Spinner size="sm" ml={2} />}
+            See on inventory {isLinkLoading && <Spinner size="sm" ml={2} />}
           </Button>
           <Button
             onClick={onClose}
